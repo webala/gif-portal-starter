@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import twitterLogo from './assets/twitter-logo.svg';
 import './App.css';
 
@@ -6,6 +7,34 @@ const TWITTER_HANDLE = '_buildspace';
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 
 const App = () => {
+
+
+  //Function to check if wallet is connected
+  const checkIfWalletIsConnected = async () => {
+    try {
+      const {solana} = window
+
+      if (solana && solana.isPhantom) {
+        console.log('Phantom wallet found!')
+      } else {
+        alert('Solana object not found. Get a Phantom Wallet 👻')
+      }
+    }catch(error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+
+    //It is recommended to wait for the window to fully load before checking for solana object
+    const onLoad = async () => {
+      await checkIfWalletIsConnected()
+    }
+
+    window.addEventListener('load', onLoad)
+    return () => window.removeEventListener('load', onLoad)
+
+  }, [])
   return (
     <div className="App">
       <div className="container">
